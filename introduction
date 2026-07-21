@@ -1,0 +1,258 @@
+
+SQL*Plus: Release 11.2.0.1.0 Production on Tue Jul 21 08:42:37 2026
+
+Copyright (c) 1982, 2010, Oracle.  All rights reserved.
+
+Enter user-name: A045@db2021
+Enter password:
+
+Connected to:
+Oracle Database 11g Release 11.2.0.1.0 - Production
+
+SQL> create table employee(
+  2  empid number(5),
+  3  empname varchars(20),
+  4  gender char,
+  5  dep varchar(5));
+empname varchars(20),
+                *
+ERROR at line 3:
+ORA-00907: missing right parenthesis
+
+
+SQL> create table employee(
+  2  empid number(5),
+  3  empname varchar2(20),
+  4  gender char,
+  5  dept varchar2(10));
+
+Table created.
+
+SQL> desc employee
+ Name                                      Null?    Type
+ ----------------------------------------- -------- ----------------------------
+ EMPID                                              NUMBER(5)
+ EMPNAME                                            VARCHAR2(20)
+ GENDER                                             CHAR(1)
+ DEPT                                               VARCHAR2(10)
+
+SQL> create table employee1 as select* from employee
+  2  ;
+
+Table created.
+
+SQL>
+SQL> desc employee1
+ Name                                      Null?    Type
+ ----------------------------------------- -------- ----------------------------
+ EMPID                                              NUMBER(5)
+ EMPNAME                                            VARCHAR2(20)
+ GENDER                                             CHAR(1)
+ DEPT                                               VARCHAR2(10)
+
+SQL> create table employee2 as select gender,dept from employee;
+
+Table created.
+
+SQL> desc employee2
+ Name                                      Null?    Type
+ ----------------------------------------- -------- ----------------------------
+ GENDER                                             CHAR(1)
+ DEPT                                               VARCHAR2(10)
+
+SQL> insert into employee values(1,'bhavya','f','cse');
+
+1 row created.
+
+SQL> insert into employee values(2,'anu','f','ece');
+
+1 row created.
+
+SQL> insert into employee values(3,'abhi','m','eee');
+
+1 row created.
+
+SQL> select* from employee
+  2  ;
+
+     EMPID EMPNAME              G DEPT
+---------- -------------------- - ----------
+         1 bhavya               f cse
+         2 anu                  f ece
+         3 abhi                 m eee
+
+SQL> insert into employee (empname,empid) values('hari',4,'guru',5);
+insert into employee (empname,empid) values('hari',4,'guru',5)
+            *
+ERROR at line 1:
+ORA-00913: too many values
+
+
+SQL> insert into employee (empname,empid) values('hari',4);
+
+1 row created.
+
+SQL> select* from employee
+  2  ;
+
+     EMPID EMPNAME              G DEPT
+---------- -------------------- - ----------
+         1 bhavya               f cse
+         2 anu                  f ece
+         3 abhi                 m eee
+         4 hari
+
+SQL> insert into employee (empid,empname) values('guru',5);
+insert into employee (empid,empname) values('guru',5)
+                                            *
+ERROR at line 1:
+ORA-01722: invalid number
+
+
+SQL> insert into employee (empid,empname) values(5,'guru');
+
+1 row created.
+
+SQL> select* from employee;
+
+     EMPID EMPNAME              G DEPT
+---------- -------------------- - ----------
+         1 bhavya               f cse
+         2 anu                  f ece
+         3 abhi                 m eee
+         4 hari
+         5 guru
+
+SQL> insert into employee values(6,'priya','f','mec');
+
+1 row created.
+
+SQL> select* from employee;
+
+     EMPID EMPNAME              G DEPT
+---------- -------------------- - ----------
+         1 bhavya               f cse
+         2 anu                  f ece
+         3 abhi                 m eee
+         4 hari
+         5 guru
+         6 priya                f mec
+
+6 rows selected.
+SQL> update employee set age=20;
+update employee set age=20
+                    *
+ERROR at line 1:
+ORA-00904: "AGE": invalid identifier
+
+
+SQL> update employee set gender='f';
+
+6 rows updated.
+
+SQL> desc employee
+ Name                                      Null?    Type
+ ----------------------------------------- -------- ----------------------------
+ EMPID                                              NUMBER(5)
+ EMPNAME                                            VARCHAR2(20)
+ GENDER                                             CHAR(1)
+ DEPT                                               VARCHAR2(10)
+
+SQL> select* from employee
+  2  ;
+
+     EMPID EMPNAME              G DEPT
+---------- -------------------- - ----------
+         1 bhavya               f cse
+         2 anu                  f ece
+         3 abhi                 f eee
+         4 hari                 f
+         5 guru                 f
+         6 priya                f mec
+
+6 rows selected.
+
+SQL> insert into employee1 select * from employee;
+
+6 rows created.
+
+SQL> select * from employee2;
+
+no rows selected
+
+SQL> select * from employee1;
+
+     EMPID EMPNAME              G DEPT
+---------- -------------------- - ----------
+         1 bhavya               f cse
+         2 anu                  f ece
+         3 abhi                 f eee
+         4 hari                 f
+         5 guru                 f
+         6 priya                f mec
+
+6 rows selected.
+
+SQL> update employee set dept='cse';
+
+6 rows updated.
+
+SQL> select * from employee;
+
+     EMPID EMPNAME              G DEPT
+---------- -------------------- - ----------
+         1 bhavya               f cse
+         2 anu                  f cse
+         3 abhi                 f cse
+         4 hari                 f cse
+         5 guru                 f cse
+         6 priya                f cse
+
+6 rows selected.
+
+SQL> UPDATE EMPLOYEE SET GENDER=M WHERE EMPNAME=GURU;
+UPDATE EMPLOYEE SET GENDER=M WHERE EMPNAME=GURU
+                                           *
+ERROR at line 1:
+ORA-00904: "GURU": invalid identifier
+
+
+SQL> UPDATE EMPLOYEE SET GENDER='M' WHERE EMPNAME='GURU';
+
+0 rows updated.
+
+SQL> update employee set gender='m' where empid=4;
+
+1 row updated.
+
+SQL> select * from employee;
+
+     EMPID EMPNAME              G DEPT
+---------- -------------------- - ----------
+         1 bhavya               f cse
+         2 anu                  f cse
+         3 abhi                 f cse
+         4 hari                 m cse
+         5 guru                 f cse
+         6 priya                f cse
+
+6 rows selected.
+
+SQL> update employee set gender='m' where empid=5;
+
+1 row updated.
+
+SQL> select * from employee;
+
+     EMPID EMPNAME              G DEPT
+---------- -------------------- - ----------
+         1 bhavya               f cse
+         2 anu                  f cse
+         3 abhi                 f cse
+         4 hari                 m cse
+         5 guru                 m cse
+         6 priya                f cse
+
+6 rows selected.
+
+SQL>
