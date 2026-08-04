@@ -1,0 +1,198 @@
+SQL> desc course
+ERROR:
+ORA-04043: object course does not exist 
+
+
+SQL> desc course;
+ERROR:
+ORA-04043: object course does not exist 
+
+
+SQL> create table course(
+  2  course_id number(10) Primar Key,
+  3  course_name varchar2(20),
+  4  course_enrolled_date date
+  5  );
+course_id number(10) Primar Key,
+                     *
+ERROR at line 2:
+ORA-00907: missing right parenthesis 
+
+
+SQL> create table course(
+  2  course_id number(10) Primary Key,
+  3  course_name varchar2(20),
+  4  course_enrolled_date date
+  5  );
+
+Table created.
+
+SQL> create table student(
+  2  student_id number(10) ,
+  3  student_name varchar2(20),
+  4  course_id number(10) References course(course_id),
+  5  student_age number(5));
+
+Table created.
+
+SQL> create table student1(
+  2  student_id number(5)  Primary Key,
+  3  student_name varchar2(20) Not Null,
+  4  course_id number(10) References course(course_id),
+  5  student_age number(5) check student_age>18);
+student_age number(5) check student_age>18)
+                            *
+ERROR at line 5:
+ORA-00906: missing left parenthesis 
+
+
+SQL> create table student1(
+  2  student_id number(5)  Primary Key,
+  3  student_name varchar2(20) Not Null,
+  4  course_id number(10) References course(course_id),
+  5  student_age number(5) check (student_age>18));
+create table student1(
+             *
+ERROR at line 1:
+ORA-00955: name is already used by an existing object 
+
+
+SQL> create table student2(
+  2  student_id number(5)  Primary Key,
+  3  student_name varchar2(20) Not Null,
+  4  course_id number(10) References course(course_id),
+  5  student_age number(5) check (student_age>18));
+create table student2(
+             *
+ERROR at line 1:
+ORA-00955: name is already used by an existing object 
+
+
+SQL> drop table student2;
+
+Table dropped.
+
+SQL> drop table student1;
+
+Table dropped.
+
+SQL> drop table student;
+
+Table dropped.
+
+SQL> create table student2(
+  2  student_id number(5)  Primary Key,
+  3  student_name varchar2(20) Not Null,
+  4  course_id number(10) References course(course_id),
+  5  student_age number(5) check (student_age>18));
+
+Table created.
+
+SQL> insert into course values (22, 'oracle', 040826);
+insert into course values (22, 'oracle', 040826)
+                                         *
+ERROR at line 1:
+ORA-00932: inconsistent datatypes: expected DATE got NUMBER 
+
+
+SQL> insert into course values (22, 'oracle', '04aug06');
+
+1 row created.
+
+SQL> insert into course values (30, 'c++', '05nov26');
+
+1 row created.
+
+SQL> select * from course
+  2  ;
+
+ COURSE_ID COURSE_NAME          COURSE_EN                                       
+---------- -------------------- ---------                                       
+        22 oracle               04-AUG-06                                       
+        30 c++                  05-NOV-26                                       
+
+SQL> insert into student2 values (3, 'aishwarya', 33, 20);
+insert into student2 values (3, 'aishwarya', 33, 20)
+*
+ERROR at line 1:
+ORA-02291: integrity constraint (A045.SYS_C0029162) violated - parent key not 
+found 
+
+
+SQL> insert into student2 values(1,'aishu',32,20);
+insert into student2 values(1,'aishu',32,20)
+*
+ERROR at line 1:
+ORA-02291: integrity constraint (A045.SYS_C0029162) violated - parent key not 
+found 
+
+
+SQL> insert into student2 values(1,'aishu',22 ,20);
+
+1 row created.
+
+SQL> insert into student2 values(2,'bhavya', 30,17);
+insert into student2 values(2,'bhavya', 30,17)
+*
+ERROR at line 1:
+ORA-02290: check constraint (A045.SYS_C0029160) violated 
+
+
+SQL> insert into student2 values(2,'bhavya', 30,23);
+
+1 row created.
+
+SQL> insert into student2 values(5,'bunty',22,19);
+
+1 row created.
+
+SQL> select *from student2;
+
+STUDENT_ID STUDENT_NAME          COURSE_ID STUDENT_AGE                          
+---------- -------------------- ---------- -----------                          
+         1 aishu                        22          20                          
+         2 bhavya                       30          23                          
+         5 bunty                        22          19                          
+
+SQL> select *from student2 where course_id=22;
+
+STUDENT_ID STUDENT_NAME          COURSE_ID STUDENT_AGE                          
+---------- -------------------- ---------- -----------                          
+         1 aishu                        22          20                          
+         5 bunty                        22          19                          
+
+SQL> select *from student2 where student_name=bunty;
+select *from student2 where student_name=bunty
+                                         *
+ERROR at line 1:
+ORA-00904: "BUNTY": invalid identifier 
+
+
+SQL> select *from student2 where student_name='bunty';
+
+STUDENT_ID STUDENT_NAME          COURSE_ID STUDENT_AGE                          
+---------- -------------------- ---------- -----------                          
+         5 bunty                        22          19                          
+
+SQL> select student_name from student2;
+
+STUDENT_NAME                                                                    
+--------------------                                                            
+aishu                                                                           
+bhavya                                                                          
+bunty                                                                           
+
+SQL> select student_name from student2 where student_name like 'b%';
+
+STUDENT_NAME                                                                    
+--------------------                                                            
+bhavya                                                                          
+bunty                                                                           
+
+SQL> select count(*) from student2;
+
+  COUNT(*)                                                                      
+----------                                                                      
+         3                                                                      
+
+SQL> spool off
