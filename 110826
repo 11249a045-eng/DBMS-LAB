@@ -1,0 +1,147 @@
+
+Enter user-name: A045@db2021
+Enter password:
+
+Connected to:
+Oracle Database 11g Release 11.2.0.1.0 - Production
+
+SQL> create table course(
+  2  course_id number(5),
+  3  course_name varchar2(20));
+create table course(
+             *
+ERROR at line 1:
+ORA-00955: name is already used by an existing object
+
+
+SQL> drop table course;
+drop table course
+           *
+ERROR at line 1:
+ORA-02449: unique/primary keys in table referenced by foreign keys
+
+
+SQL> create table dept(
+  2  dept_id number(5),
+  3  dept_name varchar2(10));
+
+Table created.
+
+SQL> create table student(
+  2  student_name varchar2(20),
+  3  student_id number(5),
+  4  age char,
+  5  )
+  6  ;
+)
+*
+ERROR at line 5:
+ORA-00904: : invalid identifier
+
+
+SQL>  create table student(
+  2   student_name varchar2(20),
+  3   student_id number(5),
+  4   age number(5),
+  5   gender char,
+  6   mail_id varchar2(25));
+
+Table created.
+
+SQL>  alter table dept enable constraint dept_id
+  2  ;
+ alter table dept enable constraint dept_id
+*
+ERROR at line 1:
+ORA-02430: cannot enable constraint (DEPT_ID) - no such constraint
+
+
+SQL>  alter table dept enable constraint primary key;
+ alter table dept enable constraint primary key
+                                            *
+ERROR at line 1:
+ORA-00933: SQL command not properly ended
+
+
+SQL>  alter table dept enable all constraints
+  2  ;
+ alter table dept enable all constraints
+                             *
+ERROR at line 1:
+ORA-01735: invalid ALTER TABLE option
+
+
+SQL>  alter table dept enable all Constraints;
+ alter table dept enable all Constraints
+                             *
+ERROR at line 1:
+ORA-01735: invalid ALTER TABLE option
+
+
+SQL> alter table dept enable constraint dept_pk
+  2  ;
+alter table dept enable constraint dept_pk
+*
+ERROR at line 1:
+ORA-02430: cannot enable constraint (DEPT_PK) - no such constraint
+
+
+SQL> alter table dept enable constraint dept_pk;
+alter table dept enable constraint dept_pk
+*
+ERROR at line 1:
+ORA-02430: cannot enable constraint (DEPT_PK) - no such constraint
+
+
+SQL> alter table dept enable constraint dept_id primary key(dept_id);
+alter table dept enable constraint dept_id primary key(dept_id)
+                                           *
+ERROR at line 1:
+ORA-00933: SQL command not properly ended
+
+
+SQL> alter table dept add constraint dept_id primary key(dept_id);
+
+Table altered.
+
+SQL> desc dept
+ Name                                      Null?    Type
+ ----------------------------------------- -------- ----------------------------
+ DEPT_ID                                   NOT NULL NUMBER(5)
+ DEPT_NAME                                          VARCHAR2(10)
+
+SQL> alter table student add constraint student_id foreign key(student_id) references dept (dept_id);
+
+Table altered.
+
+SQL> desc student
+ Name                                      Null?    Type
+ ----------------------------------------- -------- ----------------------------
+ STUDENT_NAME                                       VARCHAR2(20)
+ STUDENT_ID                                         NUMBER(5)
+ AGE                                                NUMBER(5)
+ GENDER                                             CHAR(1)
+ MAIL_ID                                            VARCHAR2(25)
+
+SQL> desc dept
+ Name                                      Null?    Type
+ ----------------------------------------- -------- ----------------------------
+ DEPT_ID                                   NOT NULL NUMBER(5)
+ DEPT_NAME                                          VARCHAR2(10)
+
+SQL> alter table student add constraint age check(age>18);
+
+Table altered.
+
+SQL> desc student
+ Name                                      Null?    Type
+ ----------------------------------------- -------- ----------------------------
+ STUDENT_NAME                                       VARCHAR2(20)
+ STUDENT_ID                                         NUMBER(5)
+ AGE                                                NUMBER(5)
+ GENDER                                             CHAR(1)
+ MAIL_ID                                            VARCHAR2(25)
+
+SQL> alter table student add constraint mail_id unique(mail_id);
+
+Table altered.
