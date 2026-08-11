@@ -145,3 +145,72 @@ SQL> desc student
 SQL> alter table student add constraint mail_id unique(mail_id);
 
 Table altered.
+SQL>  alter table student modify student_name constraint stu_ntnull not null;
+
+Table altered.
+
+SQL> desc student
+ Name                                      Null?    Type
+ ----------------------------------------- -------- ----------------------------
+ STUDENT_NAME                              NOT NULL VARCHAR2(20)
+ STUDENT_ID                                         NUMBER(5)
+ AGE                                                NUMBER(5)
+ GENDER                                             CHAR(1)
+ MAIL_ID                                            VARCHAR2(25)
+
+SQL> SQL> ALTER TABLE STUDENT
+SP2-0734: unknown command beginning "SQL> ALTER..." - rest of line ignored.
+SQL>   ADD CONSTRAINT CHK_STUDENT_GENDER CHECK (GENDER IN ('M', 'F'));
+SP2-0734: unknown command beginning "ADD CONSTR..." - rest of line ignored.
+SQL> alter table student add constraint chk_student_gender check(gender in ('m','f'));
+
+Table altered.
+
+SQL> desc dept
+ Name                                      Null?    Type
+ ----------------------------------------- -------- ----------------------------
+ DEPT_ID                                   NOT NULL NUMBER(5)
+ DEPT_NAME                                          VARCHAR2(10)
+
+SQL>  alter table student add constraint mail_id unique(mail_id);
+ alter table student add constraint mail_id unique(mail_id)
+                                            *
+ERROR at line 1:
+ORA-02261: such unique or primary key already exists in the table
+
+
+SQL> insert into student values('arya',53,20,'m','arya@gmail');
+insert into student values('arya',53,20,'m','arya@gmail')
+*
+ERROR at line 1:
+ORA-02291: integrity constraint (A045.STUDENT_ID) violated - parent key not
+found
+
+
+SQL> insert into dept values(23, 'cse');
+
+1 row created.
+
+SQL> insert into student values('arya',53,20,'m','arya@gmail');
+insert into student values('arya',53,20,'m','arya@gmail')
+*
+ERROR at line 1:
+ORA-02291: integrity constraint (A045.STUDENT_ID) violated - parent key not
+found
+
+
+SQL> insert into dept values(53,'ece')
+  2  ;
+
+1 row created.
+
+SQL> insert into student values('arya',53,20,'m','arya@gmail');
+
+1 row created.
+
+SQL> insert into student values('abhi',23,17,'f','abhi@gmail');
+insert into student values('abhi',23,17,'f','abhi@gmail')
+*
+ERROR at line 1:
+ORA-02290: check constraint (A045.AGE) violated
+
