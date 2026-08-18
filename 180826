@@ -1,0 +1,234 @@
+SQL*Plus: Release 11.2.0.1.0 Production on Tue Aug 18 15:15:18 2026
+
+Copyright (c) 1982, 2010, Oracle.  All rights reserved.
+
+Enter user-name: A045@db2021
+Enter password:
+
+Connected to:
+Oracle Database 11g Release 11.2.0.1.0 - Production
+SQL> desc student
+ Name                                      Null?    Type
+ ----------------------------------------- -------- ----------------------------
+ STUDENT_NAME                              NOT NULL VARCHAR2(20)
+ STUDENT_ID                                         NUMBER(5)
+ AGE                                                NUMBER(5)
+ GENDER                                             CHAR(1)
+ MAIL_ID                                            VARCHAR2(25)
+
+SQL> desc dept
+ Name                                      Null?    Type
+ ----------------------------------------- -------- ----------------------------
+ DEPT_ID                                   NOT NULL NUMBER(5)
+ DEPT_NAME                                          VARCHAR2(10)
+
+SQL> select * from student
+  2  ;
+
+no rows selected
+
+SQL> insert into student values('dhanya',101,19,'f','dhan@123gmail.com');
+insert into student values('dhanya',101,19,'f','dhan@123gmail.com')
+*
+ERROR at line 1:
+ORA-02291: integrity constraint (A045.STUDENT_ID) violated - parent key not
+found
+
+
+SQL> desc student1;
+ERROR:
+ORA-04043: object student1 does not exist
+
+
+SQL> insert into dept values(101,'cse');
+
+1 row created.
+
+SQL> insert into student values('dhanya',101,19,'f','dhan@123gmail.com');
+
+1 row created.
+
+SQL> insert into dept values (102,'ece');
+
+1 row created.
+
+SQL> insert into student values('bhavya',102,20,'f','bhav@123gmail.com');
+
+1 row created.
+
+SQL> insert into dept values (103,'eee');
+
+1 row created.
+
+SQL> insert into student values('ram',103,21,'m','ram@123gmail.com);
+ERROR:
+ORA-01756: quoted string not properly terminated
+
+
+SQL> insert into student values('ram',103,21,'m','ram@123gmail.com');
+
+1 row created.
+
+SQL> select * from student;
+
+STUDENT_NAME         STUDENT_ID        AGE G MAIL_ID
+-------------------- ---------- ---------- - -------------------------
+dhanya                      101         19 f dhan@123gmail.com
+bhavya                      102         20 f bhav@123gmail.com
+ram                         103         21 m ram@123gmail.com
+
+SQL> select * from dept;
+
+   DEPT_ID DEPT_NAME
+---------- ----------
+       101 cse
+       102 ece
+       103 eee
+
+SQL> insert into dept values(104,'ece');
+
+1 row created.
+
+SQL> insert into student values ('abhi',104,21,'m','abhi@gmail.com);
+ERROR:
+ORA-01756: quoted string not properly terminated
+
+
+SQL> insert into student values ('abhi',104,21,'m','abhi@gmail.com');
+
+1 row created.
+
+SQL> insert into dept values(105,'cse');
+
+1 row created.
+
+SQL> insert into student values('james',105,21,'m','james@gmail.com');
+
+1 row created.
+
+SQL> select * from dept;
+
+   DEPT_ID DEPT_NAME
+---------- ----------
+       101 cse
+       102 ece
+       103 eee
+       104 ece
+       105 cse
+
+SQL> select *from student;
+
+STUDENT_NAME         STUDENT_ID        AGE G MAIL_ID
+-------------------- ---------- ---------- - -------------------------
+dhanya                      101         19 f dhan@123gmail.com
+bhavya                      102         20 f bhav@123gmail.com
+ram                         103         21 m ram@123gmail.com
+abhi                        104         21 m abhi@gmail.com
+james                       105         21 m james@gmail.com
+
+SQL> select student_id,student_name,dept_name from student,dept;
+
+STUDENT_ID STUDENT_NAME         DEPT_NAME
+---------- -------------------- ----------
+       101 dhanya               cse
+       101 dhanya               ece
+       101 dhanya               eee
+       101 dhanya               ece
+       101 dhanya               cse
+       102 bhavya               cse
+       102 bhavya               ece
+       102 bhavya               eee
+       102 bhavya               ece
+       102 bhavya               cse
+       103 ram                  cse
+
+STUDENT_ID STUDENT_NAME         DEPT_NAME
+---------- -------------------- ----------
+       103 ram                  ece
+       103 ram                  eee
+       103 ram                  ece
+       103 ram                  cse
+       104 abhi                 cse
+       104 abhi                 ece
+       104 abhi                 eee
+       104 abhi                 ece
+       104 abhi                 cse
+       105 james                cse
+       105 james                ece
+
+STUDENT_ID STUDENT_NAME         DEPT_NAME
+---------- -------------------- ----------
+       105 james                eee
+       105 james                ece
+       105 james                cse
+
+25 rows selected.
+
+SQL> select student_id,student_name,dept.dept_id,dept_name,student,dept where student.student_id=dept.dept_id;
+select student_id,student_name,dept.dept_id,dept_name,student,dept where student.student_id=dept.dept_id
+                                                                   *
+ERROR at line 1:
+ORA-00923: FROM keyword not found where expected
+
+
+SQL> select student_id,student_name,dept.dept_id,dept_name from student,dept where student.student_id=dept.dept_id;
+
+STUDENT_ID STUDENT_NAME            DEPT_ID DEPT_NAME
+---------- -------------------- ---------- ----------
+       101 dhanya                      101 cse
+       102 bhavya                      102 ece
+       103 ram                         103 eee
+       104 abhi                        104 ece
+       105 james                       105 cse
+
+SQL> select * from dept;
+
+   DEPT_ID DEPT_NAME
+---------- ----------
+       101 cse
+       102 ece
+       103 eee
+       104 ece
+       105 cse
+
+SQL> select student_id,student_name,age,gender,mail_id from student;
+
+STUDENT_ID STUDENT_NAME                AGE G MAIL_ID
+---------- -------------------- ---------- - -------------------------
+       101 dhanya                       19 f dhan@123gmail.com
+       102 bhavya                       20 f bhav@123gmail.com
+       103 ram                          21 m ram@123gmail.com
+       104 abhi                         21 m abhi@gmail.com
+       105 james                        21 m james@gmail.com
+
+
+SQL> select a.student_id,a.student_name,a.age,b.dept_id,b.dept_name from student a, dept b where a.student_id(+)=b.dept_id;
+
+STUDENT_ID STUDENT_NAME                AGE    DEPT_ID DEPT_NAME
+---------- -------------------- ---------- ---------- ----------
+       101 dhanya                       19        101 cse
+       102 bhavya                       20        102 ece
+       103 ram                          21        103 eee
+       104 abhi                         21        104 ece
+       105 james                        21        105 cse
+
+SQL> select s1.student_name as student1,
+  2  s2.student_name as student2 from student s1 join student s2 on s1.age=s2.age;
+
+STUDENT1             STUDENT2
+-------------------- --------------------
+dhanya               dhanya
+bhavya               bhavya
+james                ram
+abhi                 ram
+ram                  ram
+james                abhi
+abhi                 abhi
+ram                  abhi
+james                james
+abhi                 james
+ram                  james
+
+11 rows selected.
+
+SQL>
