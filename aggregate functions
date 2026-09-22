@@ -1,0 +1,169 @@
+
+SQL*Plus: Release 11.2.0.1.0 Production on Tue Sep 22 08:41:55 2026
+
+Copyright (c) 1982, 2010, Oracle.  All rights reserved.
+
+Enter user-name: a045db@2021
+Enter password:
+ERROR:
+ORA-12543: TNS:destination host unreachable
+
+
+Enter user-name: A045@DB2021
+Enter password:
+
+Connected to:
+Oracle Database 11g Release 11.2.0.1.0 - Production
+
+SQL> create table student(
+  2  student_id number(5) PRIMARY KEY,
+  3  student_name varchar2(30),
+  4  department varchar2(20),
+  5  marks number(3)
+  6  );
+create table student(
+             *
+ERROR at line 1:
+ORA-00955: name is already used by an existing object
+
+
+SQL> create table student45(
+  2     student_id number(5) PRIMARY KEY,
+  3     student_name varchar2(30),
+  4     department varchar2(20),
+  5     marks number(3)
+  6  );
+
+Table created.
+
+SQL> insert into student45 values(1,'ajay','cse',90);
+
+1 row created.
+
+SQL> insert into student45 values(2,'sri','ece',85);
+
+1 row created.
+
+SQL> insert into student45 values(3,'anu','eee',95);
+
+1 row created.
+
+SQL> insert into student45 values(4,'abhi',cse',100);
+ERROR:
+ORA-01756: quoted string not properly terminated
+
+
+SQL> insert into student45 values(4,'abhi','cse',100);
+
+1 row created.
+
+SQL> insert into student45 values(5,'pinky','ece',90);
+
+1 row created.
+
+SQL> select count(*) as total_students from student45;
+
+TOTAL_STUDENTS
+--------------
+             5
+
+SQL> select sum(marks) as total_marks from student45;
+
+TOTAL_MARKS
+-----------
+        460
+
+SQL> select avg(marks) as average_marks from student45;
+
+AVERAGE_MARKS
+-------------
+           92
+
+SQL> select max(marks) as highest_marks from student45;
+
+HIGHEST_MARKS
+-------------
+          100
+
+SQL> select min(marks) as lowest_marks from student45;
+
+LOWEST_MARKS
+------------
+          85
+
+SQL> select department ,avg(marks) as avg_marks from student group by department;
+select department ,avg(marks) as avg_marks from student group by department
+                                                                 *
+ERROR at line 1:
+ORA-00904: "DEPARTMENT": invalid identifier
+
+
+SQL> select department ,avg(marks) as avg_marks from student45 group by department;
+
+DEPARTMENT            AVG_MARKS
+-------------------- ----------
+cse                          95
+eee                          95
+ece                        87.5
+
+SQL> select department , count(*) as total_students from student45 group by department;
+
+DEPARTMENT           TOTAL_STUDENTS
+-------------------- --------------
+cse                               2
+eee                               1
+ece                               2
+
+SQL> select department,max(marks) as max_marks from student group by department;
+select department,max(marks) as max_marks from student group by department
+                                                                *
+ERROR at line 1:
+ORA-00904: "DEPARTMENT": invalid identifier
+
+
+SQL> select department,max(marks) as max_marks from student45 group by department;
+
+DEPARTMENT            MAX_MARKS
+-------------------- ----------
+cse                         100
+eee                          95
+ece                          90
+
+SQL> select department , avg(marks) as avg_marks from student group by department having avg(marks) >85;
+select department , avg(marks) as avg_marks from student group by department having avg(marks) >85
+                                                                                        *
+ERROR at line 1:
+ORA-00904: "MARKS": invalid identifier
+
+
+SQL> select department , avg(marks) as avg_marks from student45 group by department having avg(marks) >85;
+
+DEPARTMENT            AVG_MARKS
+-------------------- ----------
+cse                          95
+eee                          95
+ece                        87.5
+
+SQL> SELECT DEPARTMENT, COUNT(*) AS NO_OF_STUDENTS,
+  2  AVG(MARKS) AS AVG_MARKS, MAX(MARKS) AS HIGHEST_MARK
+  3  FROM STUDENT45
+  4  GROUP BY DEPARTMENT
+  5  HAVING AVG(MARKS) > 80;
+
+DEPARTMENT           NO_OF_STUDENTS  AVG_MARKS HIGHEST_MARK
+-------------------- -------------- ---------- ------------
+cse                               2         95          100
+eee                               1         95           95
+ece                               2       87.5           90
+
+SQL> select * from student45;
+
+STUDENT_ID STUDENT_NAME                   DEPARTMENT                MARKS
+---------- ------------------------------ -------------------- ----------
+         1 ajay                           cse                          90
+         2 sri                            ece                          85
+         3 anu                            eee                          95
+         4 abhi                           cse                         100
+         5 pinky                          ece                          90
+
+SQL>
