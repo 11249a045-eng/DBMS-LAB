@@ -1,0 +1,191 @@
+
+SQL*Plus: Release 11.2.0.1.0 Production on Tue Sep 29 18:50:34 2026
+
+Copyright (c) 1982, 2010, Oracle.  All rights reserved.
+
+Enter user-name: A045@db2021
+Enter password:
+
+Connected to:
+Oracle Database 11g Release 11.2.0.1.0 - Production
+
+SQL> create table department
+  2  (
+  3  dept_id number(3) primary key,
+  4  dept_name varchar2(30)
+  5  );
+
+Table created.
+
+SQL> insert into department values(101,'cse');
+
+1 row created.
+
+SQL> insert into department values(102,'ece');
+
+1 row created.
+
+SQL> insert into department values(103,'it');
+
+1 row created.
+
+SQL> create table student6(
+  2  student_id number(5) primary key,
+  3  student_name varchar2(30),
+  4  marks number(3),
+  5  dept_id number(3),
+  6  constraint fk_dept foreign key (dept_id) references department(dept_id)
+  7  );
+
+Table created.
+
+SQL> insert into student6 values (11,'priya',85,101);
+
+1 row created.
+
+SQL> insert into student6 values(12,'guru',90,102);
+
+1 row created.
+
+SQL> insert into student6 values(13,'adhi',85,103);
+
+1 row created.
+
+SQL> insert into student6 values(14,'raj',89,101);
+
+1 row created.
+
+SQL> select s.student_id,s.student_name,d.dept_name from student6 s inner join department d on s.dept_id=d.dept_id;
+
+STUDENT_ID STUDENT_NAME                   DEPT_NAME
+---------- ------------------------------ ------------------------------
+        11 priya                          cse
+        12 guru                           ece
+        13 adhi                           it
+        14 raj                            cse
+
+SQL> select s.student_name,d.dept_name from student6 s left outer join department d on s.dept_id=d.dept_id;
+
+STUDENT_NAME                   DEPT_NAME
+------------------------------ ------------------------------
+raj                            cse
+priya                          cse
+guru                           ece
+adhi                           it
+
+SQL> select s.student_name,d.dept_name from student6 s right outer jopin department d on s.dept_id=d.dept_id;
+select s.student_name,d.dept_name from student6 s right outer jopin department d on s.dept_id=d.dept_id
+                                                              *
+ERROR at line 1:
+ORA-00905: missing keyword
+
+
+SQL> select s.student_name,d.dept_name from student6 s right outer join department d on s.dept_id=d.dept_id;
+
+STUDENT_NAME                   DEPT_NAME
+------------------------------ ------------------------------
+priya                          cse
+guru                           ece
+adhi                           it
+raj                            cse
+
+SQL> select s.student_name,d.dept_name from student6 s full outer join department d on s.dept_id=d.dept_id;
+
+STUDENT_NAME                   DEPT_NAME
+------------------------------ ------------------------------
+priya                          cse
+guru                           ece
+adhi                           it
+raj                            cse
+
+SQL> CREATE TABLE EMPLOYEE6
+  2  (
+  3   EMP_ID NUMBER(5) PRIMARY KEY,
+  4   EMP_NAME VARCHAR2(30),
+  5   MANAGER_ID NUMBER(5)
+  6  );
+
+Table created.
+
+SQL> INSERT INTO EMPLOYEE VALUES (1,'RAJ',NULL);
+INSERT INTO EMPLOYEE VALUES (1,'RAJ',NULL)
+            *
+ERROR at line 1:
+ORA-00947: not enough values
+
+
+SQL> INSERT INTO EMPLOYEE VALUES (2,'ARUN',1);
+INSERT INTO EMPLOYEE VALUES (2,'ARUN',1)
+            *
+ERROR at line 1:
+ORA-00947: not enough values
+
+
+SQL> INSERT INTO EMPLOYEE VALUES (3,'BALA',1);
+INSERT INTO EMPLOYEE VALUES (3,'BALA',1)
+            *
+ERROR at line 1:
+ORA-00947: not enough values
+
+
+SQL> CREATE TABLE EMPLOYEE6
+  2  (
+  3   EMP_ID NUMBER(5) PRIMARY KEY,
+  4   EMP_NAME VARCHAR2(30),
+  5   MANAGER_ID NUMBER(5)
+  6  );
+CREATE TABLE EMPLOYEE6
+             *
+ERROR at line 1:
+ORA-00955: name is already used by an existing object
+
+
+SQL> INSERT INTO EMPLOYEE6 VALUES (1,'RAJ',NULL);
+
+1 row created.
+
+SQL> INSERT INTO EMPLOYEE6 VALUES (2,'ARUN',1);
+
+1 row created.
+
+SQL> INSERT INTO EMPLOYEE6 VALUES (3,'BALA',1);
+
+1 row created.
+
+SQL> SELECT E.EMP_NAME EMPLOYEE, M.EMP_NAME MANAGER
+  2  FROM EMPLOYEE6 E
+  3  LEFT JOIN EMPLOYEE M
+  4   ON E.MANAGER_ID = M.EMP_ID;
+ ON E.MANAGER_ID = M.EMP_ID
+                   *
+ERROR at line 4:
+ORA-00904: "M"."EMP_ID": invalid identifier
+
+
+SQL> SELECT STUDENT_NAME
+  2  FROM STUDENT6
+  3  WHERE DEPT_ID IN
+  4  (
+  5   SELECT DEPT_ID
+  6   FROM DEPARTMENT
+  7   WHERE DEPT_NAME = 'CSE'
+  8  );
+
+no rows selected
+
+SQL> SELECT STUDENT_NAME, MARKS, DEPT_ID
+  2  FROM STUDENT6 S1
+  3  WHERE MARKS =
+  4  (
+  5   SELECT MAX(MARKS)
+  6   FROM STUDENT6 S2
+  7   WHERE S1.DEPT_ID = S2.DEPT_ID
+  8  );
+
+STUDENT_NAME                        MARKS    DEPT_ID
+------------------------------ ---------- ----------
+guru                                   90        102
+adhi                                   85        103
+raj                                    89        101
+
+SQL>
