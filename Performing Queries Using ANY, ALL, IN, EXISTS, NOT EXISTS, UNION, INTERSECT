@@ -1,0 +1,135 @@
+
+SQL*Plus: Release 11.2.0.1.0 Production on Tue Sep 29 17:30:08 2026
+
+Copyright (c) 1982, 2010, Oracle.  All rights reserved.
+
+Enter user-name: A045@db2021
+Enter password:
+
+Connected to:
+Oracle Database 11g Release 11.2.0.1.0 - Production
+
+SQL> create table student5(
+  2  student_id number(5) primary key,
+  3  student_name varchar2(30),
+  4  department varchar2(20),
+  5  marks number(3)
+  6  );
+
+Table created.
+
+SQL> insert into student5 values (20,'arya','cse',98);
+
+1 row created.
+
+SQL> insert into student5 values (21,'abhi','ece',99);
+
+1 row created.
+
+SQL> insert into student5 values (23,'alia','eee',85);
+
+1 row created.
+
+SQL> insert into student5 values(24,'babu','cse',95);
+
+1 row created.
+
+SQL> create table alumni
+  2  (
+  3  student_name varchar2(30)
+  4  );
+
+Table created.
+
+SQL> insert into alumni values ('abhi');
+
+1 row created.
+
+SQL> insert into alumni values('ravi');
+
+1 row created.
+
+SQL> insert into alumni values('arya');
+
+1 row created.
+
+SQL> select * from student5 where department in ('cse','eee');
+
+STUDENT_ID STUDENT_NAME                   DEPARTMENT                MARKS
+---------- ------------------------------ -------------------- ----------
+        20 arya                           cse                          98
+        23 alia                           eee                          85
+        24 babu                           cse                          95
+
+SQL> select * from student5 where marks>any
+  2  (
+  3  select marks from student5 where department='cse');
+
+STUDENT_ID STUDENT_NAME                   DEPARTMENT                MARKS
+---------- ------------------------------ -------------------- ----------
+        21 abhi                           ece                          99
+        20 arya                           cse                          98
+
+SQL> select * from student5 where marks>all(
+  2  select marks from student where department='ece'
+  3  );
+
+STUDENT_ID STUDENT_NAME                   DEPARTMENT                MARKS
+---------- ------------------------------ -------------------- ----------
+        20 arya                           cse                          98
+        21 abhi                           ece                          99
+        23 alia                           eee                          85
+        24 babu                           cse                          95
+
+SQL>
+SQL>
+SQL>
+SQL> select student_name from student5 s where exists(
+  2  select * from alumni a where a.student_name=s.student_name);
+
+STUDENT_NAME
+------------------------------
+abhi
+arya
+
+SQL> select student_name from student5 union select student_name from alumni;
+
+STUDENT_NAME
+------------------------------
+abhi
+alia
+arya
+babu
+ravi
+
+SQL> select student_name from student5 intersect select student_name from alumni;
+
+STUDENT_NAME
+------------------------------
+abhi
+arya
+
+SQL> insert into student5 values (20,'jay','ece',90);
+insert into student5 values (20,'jay','ece',90)
+*
+ERROR at line 1:
+ORA-00001: unique constraint (A045.SYS_C0034267) violated
+
+
+SQL> insert into student5 values(NULL,'kasi','ece',97);
+insert into student5 values(NULL,'kasi','ece',97)
+                            *
+ERROR at line 1:
+ORA-01400: cannot insert NULL into ("A045"."STUDENT5"."STUDENT_ID")
+
+
+SQL> select * from student5;
+
+STUDENT_ID STUDENT_NAME                   DEPARTMENT                MARKS
+---------- ------------------------------ -------------------- ----------
+        20 arya                           cse                          98
+        21 abhi                           ece                          99
+        23 alia                           eee                          85
+        24 babu                           cse                          95
+
+SQL>
