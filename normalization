@@ -1,3 +1,8 @@
+Enter user-name: A045@db2021
+Enter password:
+
+Connected to:
+Oracle Database 11g Release 11.2.0.1.0 - Production
 SQL> CREATE TABLE STUDENT_COURSE_1NF
   2  (
   3   STUDENT_ID NUMBER(5),
