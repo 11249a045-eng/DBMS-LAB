@@ -1,0 +1,67 @@
+SQL> CREATE TABLE EMPLOYEE55(
+  2  EMP_ID NUMBER(5) PRIMARY KEY,
+  3   EMP_NAME VARCHAR2(30),
+  4   SALARY NUMBER(8)
+  5  );
+
+Table created.
+
+SQL> insert into employee values (101,'dhana',35000);
+insert into employee values (101,'dhana',35000)
+            *
+ERROR at line 1:
+ORA-00947: not enough values
+
+
+SQL> insert into employee55 values (101,'dhana',35000);
+
+1 row created.
+
+SQL> insert into employee55 values (102,'uma',40000);
+
+1 row created.
+
+SQL> grant select on employee55 to scott;
+
+Grant succeeded.
+
+SQL> grant select, insert, update on employee55 to scott;
+
+Grant succeeded.
+
+SQL> revoke insert on employee55 from scott;
+
+Revoke succeeded.
+
+SQL> insert into employee55 values (103,'divya',45000);
+
+1 row created.
+
+SQL> insert into employee55 values (104,'rani',42000);
+
+1 row created.
+
+SQL> savepoint sp1;
+
+Savepoint created.
+
+SQL> insert into employee55 values (105,'ravi',38000);
+
+1 row created.
+
+SQL> rollback to sp1;
+
+Rollback complete.
+
+SQL> select * from employee55;
+
+    EMP_ID EMP_NAME                           SALARY
+---------- ------------------------------ ----------
+       101 dhana                               35000
+       102 uma                                 40000
+       103 divya                               45000
+       104 rani                                42000
+
+SQL> commit;
+
+Commit complete.
