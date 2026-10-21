@@ -1,0 +1,121 @@
+SQL> create table course4(
+  2    2  COURSE_ID number (5) PRIMARY KEY,
+  3    3  COURSE_NAME VARCHAR(20) NOT NULL
+  4    4  );
+  2  COURSE_ID number (5) PRIMARY KEY,
+  *
+ERROR at line 2:
+ORA-00904: : invalid identifier
+
+
+SQL> create table course4(
+  2      COURSE_ID number (5) PRIMARY KEY,
+  3      COURSE_NAME VARCHAR(20) NOT NULL
+  4      );
+
+Table created.
+
+SQL> desc course4;
+ Name                                      Null?    Type
+ ----------------------------------------- -------- ----------------------------
+ COURSE_ID                                 NOT NULL NUMBER(5)
+ COURSE_NAME                               NOT NULL VARCHAR2(20)
+
+SQL> create table student12(
+  2      REG_NO number(10) PRIMARY KEY,
+  3      NAME VARCHAR(20) NOT NULL,
+  4      COURSE_ID number(2) REFERENCES COURSE(COURSE_ID),
+  5      EMAIL VARCHAR(50) UNIQUE,
+  6      GENDER CHAR DEFAULT 'M',
+  7      AGE NUMBER(3) CHECK (AGE>=20)
+  8      );
+
+Table created.
+
+SQL> desc student12;
+ Name                                      Null?    Type
+ ----------------------------------------- -------- ----------------------------
+ REG_NO                                    NOT NULL NUMBER(10)
+ NAME                                      NOT NULL VARCHAR2(20)
+ COURSE_ID                                          NUMBER(2)
+ EMAIL                                              VARCHAR2(50)
+ GENDER                                             CHAR(1)
+ AGE                                                NUMBER(3)
+
+SQL> insert into student12 values(33,'dhana','cse','11249a033@kanchiuniv.ac.in','f',20);
+insert into student12 values(33,'dhana','cse','11249a033@kanchiuniv.ac.in','f',20)
+                                        *
+ERROR at line 1:
+ORA-01722: invalid number
+
+
+SQL> insert into student12 values(9,'dhana','cse','dhana@gmail.com','f',21);
+insert into student12 values(9,'dhana','cse','dhana@gmail.com','f',21)
+                                       *
+ERROR at line 1:
+ORA-01722: invalid number
+
+
+SQL> INSERT INTO student12
+  2  (REG_NO, NAME, COURSE_ID, EMAIL, GENDER, AGE)
+  3  VALUES
+  4  (33, 'dhana', 1, '11249a033@kanchiuniv.ac.in', 'F', 20);
+INSERT INTO student12
+*
+ERROR at line 1:
+ORA-02291: integrity constraint (A033.SYS_C0029386) violated - parent key not
+found
+
+
+SQL> INSERT INTO COURSE (COURSE_ID, COURSE_NAME)
+  2  VALUES (1, 'CSE');
+
+1 row created.
+
+SQL>
+SQL> INSERT INTO COURSE (COURSE_ID, COURSE_NAME)
+  2  VALUES (2, 'ECE');
+
+1 row created.
+
+SQL> INSERT INTO STUDENT12
+  2  (REG_NO, NAME, COURSE_ID, EMAIL, GENDER, AGE)
+  3  VALUES
+  4  (33, 'dhana', 1, '11249a033@kanchiuniv.ac.in', 'F', 20);
+
+1 row created.
+
+SQL> select * from student12;
+
+    REG_NO NAME                  COURSE_ID
+---------- -------------------- ----------
+EMAIL                                              G        AGE
+-------------------------------------------------- - ----------
+        33 dhana                         1
+11249a033@kanchiuniv.ac.in                         F         20
+
+
+SQL> select * from course;
+
+ COURSE_ID COURSE_NAME                    DURATION
+---------- ------------------------------ --------------------
+         1 CSE
+         2 ECE
+
+SQL> insert into student12
+  2  values(33,'dhana','f')
+  3  ;
+insert into student12
+            *
+ERROR at line 1:
+ORA-00947: not enough values
+
+
+SQL> insert into student12
+  2  values(33,'mouni','11249a033@kanchiuniv.ac.in','f',20)
+  3  ;
+insert into student12
+            *
+ERROR at line 1:
+ORA-00947: not enough values
+
